@@ -1,4 +1,3 @@
-import asyncio
 
 from userbot import BOT_USERNAME
 from userbot.events import register
