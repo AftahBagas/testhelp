@@ -387,7 +387,7 @@ def button(page, modules):
         pairs.append([moduller[-1]])
     max_pages = ceil(len(pairs) / Row)
     pairs = [pairs[i:i + Row] for i in range(0, len(pairs), Row)]
-    butonlar = []
+    buttons = []
     for pairs in pairs[page]:
         buttons.append([custom.Button.inline(
             f"{HELP_EMOJI} " + pair, data=f"Information[{page}]({pair})") for pair in pairs])
@@ -403,7 +403,7 @@ def button(page, modules):
             custom.Button.inline(
                 ">>",
                 data=f"page({0 if page == (max_pages - 1) else page + 1})")])
-    return [max_pages, butonlar, pairs]
+    return [max_pages, buttons, pairs]
 
 
 with bot:
