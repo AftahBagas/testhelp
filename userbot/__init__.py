@@ -363,7 +363,7 @@ with bot:
         quit(1)
 
 
-if not BOT_TOKEN == None:
+if BOT_TOKEN is not None:
     tgbot = TelegramClient(
         "TG_BOT_TOKEN",
         api_id=API_KEY,
@@ -372,11 +372,13 @@ if not BOT_TOKEN == None:
 else:
     tgbot = None
 
+
 def button(page, modules):
     Row = 5
     Column = 2
-    
-    modules = sorted([modul for modul in moduller if not modul.startswith("_")])
+
+    modules = sorted(
+        [modul for modul in moduller if not modul.startswith("_")])
     pairs = list(map(list, zip(modules[::2], modules[1::2])))
     if len(moduller) % 2 == 1:
         pairs.append([moduller[-1]])
@@ -384,19 +386,29 @@ def button(page, modules):
     pairs = [pairs[i:i + Row] for i in range(0, len(pairs), Row)]
     butonlar = []
     for pairs in pairs[page]:
-        buttons.append([
-            custom.Button.inline(f"{HELP_EMOJI} " + pair, data=f"Information[{page}]({pair})") for pair in pairs
-        ])
+        buttons.append([custom.Button.inline(
+            f"{HELP_EMOJI} " + pair, data=f"Information[{page}]({pair})") for pair in pairs])
 
-    buttons.append([custom.Button.inline("<<", data=f"page({(max_pages - 1) if page == 0 else (page - 1)})"), custom.Button.inline("Close", b'close'), custom.Button.inline(">>", data=f"page({0 if page == (max_pages - 1) else page + 1})")])
+    buttons.append(
+        [
+            custom.Button.inline(
+                "<<",
+                data=f"page({(max_pages - 1) if page == 0 else (page - 1)})"),
+            custom.Button.inline(
+                "Close",
+                b'close'),
+            custom.Button.inline(
+                ">>",
+                data=f"page({0 if page == (max_pages - 1) else page + 1})")])
     return [max_pages, butonlar, pairs]
+
 
 with bot:
     if OTOMATIS_JOIN:
         try:
             bot(JoinChannelRequest("@TheAlphaSupport"))
             bot(JoinChannelRequest("@TheAlphaSupport"))
-        except:
+        except BaseException:
             pass
 
     modules = CMD_HELP
@@ -407,9 +419,9 @@ with bot:
         @tgbot.on(NewMessage(pattern='/start'))
         async def start_bot_handler(event):
             if not event.message.from_id == uid:
-                await event.reply(f"**👋🏻 Halo Kamu Yang disana Saya adalah bot assistant dari {ALIVE_NAME} Buat Userbotmu Sendiri Dengan**  [Tekan Disini](https://github.com/AftahBagas/Alpha-Userbot.git))
+                await event.reply(f"**👋🏻 Halo Kamu Yang disana Saya adalah bot assistant dari {ALIVE_NAME} Buat Userbotmu Sendiri Dengan ** [Tekan Disini](https: // github.com / AftahBagas / Alpha - Userbot.git))
             else:
-                await event.reply(f"**Hai {ALIVE_NAME}\n\nApa Kabarmu?**)
+                await event.reply(f"** Hai {ALIVE_NAME}\n\nApa Kabarmu?** )
 
         @tgbot.on(InlineQuery)  # pylint:disable=E0602
         async def inline_handler(event):
@@ -449,9 +461,9 @@ with bot:
                 )
             await event.answer([result] if result else None)
 
-        @tgbot.on(callbackquery.CallbackQuery(data=compile(b"page\((.+?)\)")))
+        @tgbot.on(callbackquery.CallbackQuery(data=compile(b"page\\((.+?)\\)")))
         async def page(event):
-            if not event.query.user_id == uid: 
+            if not event.query.user_id == uid:
                 return await event.answer(f"Buat Alpha UserBot Mu Sendiri, Jangan Menggunakan Milik {ALIVE_NAME} Ini.", cache_time=0, alert=True)
             page = int(event.data_match.group(1).decode("UTF-8"))
             veriler = button(page, CMD_HELP)
@@ -460,7 +472,7 @@ with bot:
                 buttons=veriler[1],
                 link_preview=False
             )
-       
+
         @tgbot.on(callbackquery.CallbackQuery(data=compile(b"close")))
         async def close(event):
             if event.query.user_id == uid:  # pylint:disable=E0602
@@ -469,30 +481,36 @@ with bot:
                 reply_pop_up_alert = f"Buat Alpha UserBot Mu Sendiri, Jangan Menggunakan Milik {ALIVE_NAME} Ini"
                 await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
 
-        
-        @tgbot.on(callbackquery.CallbackQuery(data=compile(b"bilgi\[(\d*)\]\((.*)\)")))
+        @tgbot.on(
+            callbackquery.CallbackQuery(
+                data=compile(b"bilgi\\[(\\d*)\\]\\((.*)\\)")))
         async def bilgi(event):
-            if not event.query.user_id == uid: 
+            if not event.query.user_id == uid:
                 return await event.answer(f"Buat Alpha UserBot Mu Sendiri, Jangan Menggunakan Milik {ALIVE_NAME} Ini.", cache_time=0, alert=True)
 
             page = int(event.data_match.group(1).decode("UTF-8"))
             alfareza = event.data_match.group(2).decode("UTF-8")
             try:
-                buttons = [custom.Button.inline(f"{HELP_EMOJI} " + cmd[0], data=f"alfareza[{alfareza}[{page}]]({cmd[0]})") for cmd in CMD_HELP_BOT[alfareza]['commands'].items()]
+                buttons = [
+                    custom.Button.inline(
+                        f"{HELP_EMOJI} " + cmd[0],
+                        data=f"alfareza[{alfareza}[{page}]]({cmd[0]})") for cmd in CMD_HELP_BOT[alfareza]['commands'].items()]
             except KeyError:
                 return await event.answer(f"Buat Alpha UserBot Mu Sendiri Jangan Menggunakan Milik {ALIVE_NAME} Ini.", cache_time=0, alert=True)
 
             buttons = [buttons[i:i + 2] for i in range(0, len(butonlar), 2)]
-            buttons.append([custom.Button.inline("Back", data=f"sayfa({sayfa})")])
+            buttons.append([custom.Button.inline(
+                "Back", data=f"sayfa({sayfa})")])
             await event.edit(
                 f"**Daftar Plugins:** `{alfareza}`\n**• Jumlah Command : ** `{len(CMD_HELP_BOT[alfareza]['commands'])}`",
                 buttons=buttons,
                 link_preview=False
             )
-        
-        @tgbot.on(callbackquery.CallbackQuery(data=compile(b"alfareza\[(.*)\[(\d*)\]\]\((.*)\)")))
+
+        @tgbot.on(callbackquery.CallbackQuery(data=compile(
+            b"alfareza\\[(.*)\\[(\\d*)\\]\\]\\((.*)\\)")))
         async def alfareza(event):
-            if not event.query.user_id == uid: 
+            if not event.query.user_id == uid:
                 return await event.answer(f"Buat Alpha UserBot Mu Sendiri, Jangan Menggunakan Milik {ALIVE_NAME} Ini.", cache_time=0, alert=True)
 
             cmd = event.data_match.group(1).decode("UTF-8")
@@ -517,7 +535,7 @@ with bot:
                 result += f"**Plugins Alpha UserBot :** `{PATTERNS[:1]}{command['command']}`\n"
             else:
                 result += f"**• Command :** `{PATTERNS[:1]}{command['command']} {command['params']}`\n"
-                
+
             if command['example'] is None:
                 result += f"**• Pesan :** `{command['usage']}`\n\n"
             else:
@@ -536,7 +554,7 @@ with bot:
             "Untuk Mengaktifkan Pergi Ke @BotFather, lalu settings bot > pilih mode inline > Turn On. ")
     try:
         bot.loop.run_until_complete(check_botlog_chatid())
-    except:
+    except BaseException:
         LOGS.info(
             "BOTLOG_CHATID environment variable isn't a "
             "valid entity. Check your environment variables/config.env file."
