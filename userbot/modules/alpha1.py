@@ -43,7 +43,7 @@ async def typewriter(typew):
 
 # Create by myself @localheart
 
-CmdHelp ('animasi5').add_command( 'sadboi', None, 'Sadboi Sedang Curhat Wkwk.' 
-    ).add_command( 'oii', None, 'Cek Aja Sendiri.' 
-    ).add_command( 'gabung', None, 'Animasi Pengen Ikut Nimbrung.' 
-    ).add()
+CmdHelp('animasi5').add_command(
+    'sadboi', None, 'Sadboi Sedang Curhat Wkwk.').add_command(
+        'oii', None, 'Cek Aja Sendiri.').add_command(
+            'gabung', None, 'Animasi Pengen Ikut Nimbrung.').add()
