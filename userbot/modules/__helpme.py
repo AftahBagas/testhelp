@@ -2,13 +2,6 @@
 from userbot import BOT_USERNAME
 from userbot.events import register
 
-# ██████ LANGUAGE CONSTANTS ██████ #
-
-from userbot.language import get_value
-LANG = get_value("__helpme")
-
-# ████████████████████████████████ #
-
 
 @register(outgoing=True, pattern="^.helpme")
 async def yardim(event):
